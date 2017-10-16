@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -74,27 +74,37 @@
 	                  set: function (value) {
 	                    currentTime = value;
 	                    player.vimeo('seekTo', value);
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                },
 	                'duration': {
 	                  get: function () {
 	                    return duration;
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                },
 	                'paused': {
 	                  get: function () {
 	                    return paused;
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                },
 	                'videoWidth': {
 	                  get: function () {
 	                    return videoWidth;
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                },
 	                'videoHeight': {
 	                  get: function () {
 	                    return videoHeight;
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                },
 	                'volume': {
 	                  get: function () {
@@ -103,10 +113,13 @@
 	                  set: function (value) {
 	                    volume = value;
 	                    player.vimeo('setVolume', value);
-	                  }
+	                  },
+	                  enumerable : true,
+					  configurable: true
 	                }
 	              }
 	            );
+
 	            API.mediaElement[0].play = function () {
 	              player.vimeo('play');
 	            };
@@ -126,19 +139,37 @@
 	              .vimeo('getDuration', function (value) {
 	                duration = value;
 	                updateMetadata();
-	              })
+	              });
+
+	              paused = true;
+	              updateTime();
+
+	              if (API.currentState !== VG_STATES.PLAY) {
+	                // Trigger canplay event
+	                var event = new CustomEvent("canplay");
+	                API.mediaElement[0].dispatchEvent(event);
+	              }
+	              else {
+	                  //AutoPlay
+	                  player.vimeo('play');
+	              }
 	          }
 
 	          function createVimeoIframe(id) {
-	            return $('<iframe>', {
-	              src: '//player.vimeo.com/video/' + id + '?api=1&player_id=vimeoplayer',
-	              frameborder: 0,
-	              scrolling: 'no'
-	            }).css({
-	              'width': '100%',
-	              'height': 'calc(100% + 400px)',
-	              'margin-top': '-200px'
-	            });
+	            var iframe = document.createElement('iframe');
+	            iframe.src = '//player.vimeo.com/video/' + id + '?api=1&player_id=vimeoplayer';
+	            iframe.frameBorder = 0;
+	            iframe.scrolling = 'no';
+	            iframe.style.width = '100%';
+	            iframe.style.height = '100%';
+
+	            return angular.element(iframe);
+	          }
+
+	          function updateTime() {
+	              API.onUpdateTime({
+	                  target: API.mediaElement[0]
+	              });
 	          }
 
 	          function wirePlayer() {
@@ -154,9 +185,10 @@
 	              })
 	              .on('pause', function () {
 	                paused = true;
-	                var event = new CustomEvent('pause');
-	                API.mediaElement[0].dispatchEvent(event);
-	                API.setState(VG_STATES.PAUSE);
+
+	                if (API.currentState === VG_STATES.PLAY) {
+	                    API.setState(VG_STATES.PAUSE);
+	                }
 	              })
 	              .on('finish', function () {
 	                API.onComplete();
@@ -164,9 +196,12 @@
 	              .on('playProgress', function (event, data) {
 	                currentTime = data.seconds;
 	                duration = data.duration;
-	                API.onUpdateTime({
-	                  target: API.mediaElement[0]
-	                });
+	                updateTime();
+	              })
+	              .on('loadProgress', function (event, data) {
+	                  // Trigger onStartBuffering event
+	                  var event = new CustomEvent("waiting");
+	                  API.mediaElement[0].dispatchEvent(event);
 	              });
 	          }
 
@@ -204,5 +239,5 @@
 	    }]
 	  );
 
-/***/ }
+/***/ })
 /******/ ]);
