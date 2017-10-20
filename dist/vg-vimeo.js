@@ -185,10 +185,9 @@
 	              })
 	              .on('pause', function () {
 	                paused = true;
-
-	                if (API.currentState === VG_STATES.PLAY) {
-	                    API.setState(VG_STATES.PAUSE);
-	                }
+	                var event = new CustomEvent('pause');
+	                API.mediaElement[0].dispatchEvent(event);
+	                API.setState(VG_STATES.PAUSE);
 	              })
 	              .on('finish', function () {
 	                API.onComplete();
