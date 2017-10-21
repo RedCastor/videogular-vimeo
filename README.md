@@ -16,7 +16,7 @@ In order to add support for Vimeo videos to Videogular, simply add the `vg-vimeo
 
 ```html
 <videogular vg-theme="controller.config.theme">
-    <vg-media vg-vimeo vg-src="controller.config.sources"></vg-media>
+    <vg-media vg-vimeo vg-vimeo-fullscreen="true" vg-src="controller.config.sources"></vg-media>
 </videogular>
 ```
 ```html

@@ -1,7 +1,8 @@
 {
   "name": "videogular-vimeo",
-  "version": "0.1.5-redcastor",
+  "version": "1.0.0-redcastor",
   "authors": [
+    "Auban le Grelle <auban@viamonkey.com>",
     "Momchil Marinov <momchil@mail.com>"
   ],
   "description": "Vimeo Plugin for Videogular",
@@ -23,8 +24,8 @@
   ],
   "dependencies": {
     "videogular": "latest",
-    "vimeo-jquery-api": "^0.10.1"
+    "vimeo-player-js": "^2.2.0"
   },
   "license": "MIT",
-  "homepage": "https://github.com/bagabont"
+  "homepage": "https://github.com/redcastor"
 }
