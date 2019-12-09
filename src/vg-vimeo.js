@@ -218,7 +218,7 @@
                                     angular.element(API.mediaElement[0]).replaceWith(angular.element(iframe));
                                 }
 
-                                iframe.src = '//player.vimeo.com/video/' + id + '?player_id=vimeoplayer';
+                                iframe.src = '//player.vimeo.com/video/' + id + '?player_id=vimeoplayer&muted=1';
                                 iframe.frameBorder = 0;
                                 iframe.scrolling = 'no';
                                 iframe.style.width = '100%';
